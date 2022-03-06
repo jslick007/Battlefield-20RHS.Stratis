@@ -1,0 +1,282 @@
+title = "Battlefield RHS Stratis";
+author = "jslick007";
+onLoadName = "Battlefield RHS";
+onLoadMission = "An AI vs AI gamemode";
+loadScreen = "textures\mission_thumbnail.paa";
+
+respawnOnStart = 0;
+
+////THE FOLLOWING LINE IS NEEDED FOR GRIMES SIMPLE REVIVE DESCRIPTION.EXT.
+//#include "G_Revive\G_Desc_Include.hpp"
+////
+
+allowFunctionsRecompile = 1;
+
+////THE FOLLOWING LINE IS NEEDED FOR VCOMAI DESCRIPTION.EXT.
+
+class CfgRemoteExec
+{
+// List of script functions allowed to be sent from client via remoteExec
+	class Functions
+	{
+		mode = 2;
+		jip = 1;
+
+		class vcm_serverask { allowedTargets = 0;jip = 1; };
+		class VCM_PublicScript { allowedTargets = 0;jip = 1; };
+		class SpawnScript { allowedTargets = 0;jip = 1; };
+		class enableSimulationGlobal { allowedTargets = 0;jip = 1; };
+		class VCM_fnc_KnowAbout { allowedTargets = 0;jip = 1; };
+
+	};
+};
+
+class Extended_PreInit_EventHandlers
+{
+    class VCom_init_event
+  	{
+		preinit = 1;
+        init = "call compile preprocessFileLineNumbers 'Vcom\Functions\VCM_Functions\fn_CBASettings.sqf';";
+    };
+};
+
+////
+
+corpseManagerMode = 3;
+corpseLimit = 10;
+corpseRemovalMinTime = 10;
+corpseRemovalMaxTime = 20;
+minPlayerDistance = 50;
+
+wreckManagerMode = 1;
+wreckLimit = 10;
+wreckRemovalMinTime = 15;
+briefing = -1;
+
+reviveMode = 0;
+aiKills = 0;
+enableItemsDropping = 0;
+
+disabledAI = 1;
+respawn = "base";
+respawnButton = 1;
+respawnDelay = 10;
+
+class Header {
+	gameType =  Coop;		    // Game type
+	minPlayers =  1;			// minimum number of players the mission supports
+	maxPlayers = 32;			// maximum number of players the mission supports
+};
+
+// Server params
+class Params {
+    class FriendlyFaction {
+        title = "Friendly Faction";
+        values[] = {0,1,2,3,4};
+        texts[] = {"BLU_F", "OPF_F", "RHSUSAF", "RHSAFRF", "RHSGREF"};
+        default = 2;
+    };
+    class EnemyFaction {
+        title = "Enemy Faction";
+        values[] = {0,1,2,3,4};
+        texts[] = {"BLU_F", "OPF_F", "RHSUSAF", "RHSAFRF", "RHSGREF"};
+        default = 3;
+    };
+    class Time {
+		title = "Time";
+		values[] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24};
+		default = 8;
+	};
+    class ViewDistance {
+		title = "View distance (in metres)";
+		values[] = {200,300,500,1000,1500,1600,2000,2500,3000,3500,4000,4500,5000,12000,40000};
+		default = 1500;
+	};
+    class AISkill {
+		title = "AI Skill"; // Param name visible in the list
+		values[] = {0,1,2}; // Values; must be integers; has to have the same number of elements as 'texts'
+		texts[] = {"Recruit","Regular","Veteran"}; // Description of each selectable item
+		default = 0; // Default value; must be listed in 'values' array, otherwise 0 is used
+		// Default values that are not whole numbers do not work. Param will default to 0 (or 1 if defined)
+	};
+	class NumberFriendlyGroups {
+		title = "Max Friendly Groups"; // Param name visible in the list
+		values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 17, 20, 25, 30, 40, 50, 100}; // Values; must be integers; has to have the same number of elements as 'texts'
+		default = 15; // Default value; must be listed in 'values' array, otherwise 0 is used
+		// Default values that are not whole numbers do not work. Param will default to 0 (or 1 if defined)
+	};
+	class NumberEnemyGroups {
+		title = "Max Enemy Groups"; // Param name visible in the list
+		values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30, 40, 50, 100}; // Values; must be integers; has to have the same number of elements as 'texts'
+		default = 20; // Default value; must be listed in 'values' array, otherwise 0 is used
+		// Default values that are not whole numbers do not work. Param will default to 0 (or 1 if defined)
+	};
+	class  NumberEnemySpecialGroups {
+		title = "Max Special Enemy Groups"; // Param name visible in the list
+		values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 17, 20, 25, 30, 40, 50, 100}; // Values; must be integers; has to have the same number of elements as 'texts'
+		default = 15; // Default value; must be listed in 'values' array, otherwise 0 is used
+		// Default values that are not whole numbers do not work. Param will default to 0 (or 1 if defined)
+	}
+	class  MinEnemyGroupsForCapture {
+		title = "Minimum Enemy Groups For Zone Capture"; // Param name visible in the list
+		values[] = {0, 1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 40, 50, 100}; // Values; must be integers; has to have the same number of elements as 'texts'
+		default = 5; // Default value; must be listed in 'values' array, otherwise 0 is used
+		// Default values that are not whole numbers do not work. Param will default to 0 (or 1 if defined)
+	}
+	class  MinAIDistanceForDeleteion {
+		title = "Minimum AI Distance For Deleteion"; // Param name visible in the list
+		values[] = {100, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 5000, 10000, 99999999}; // Values; must be integers; has to have the same number of elements as 'texts'
+		default = 1500; // Default value; must be listed in 'values' array, otherwise 0 is used
+		// Default values that are not whole numbers do not work. Param will default to 0 (or 1 if defined)
+	}
+	class ZoneRadius {
+		title = "Zone Radius";
+		values[] = {1, 5, 10, 25, 50, 75, 100, 200, 300, 500, 750, 1000};
+		default = 25;
+	};
+	/*class Checks {
+		title = "Number of checks (Finds zones, spawners..)";
+		values[] = {10, 50, 100, 200, 300, 400, 500, 1000};
+		// When 'texts' are missing, values will be displayed directly instead
+		default = 300;
+	};*/
+	class HQEnabled {
+        title = "HQ Enabled";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 1;
+    };
+	class FriendlyAIEnabled {
+        title = "Friendly AI Enabled";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 1;
+    };
+	class FriendlyMarkEnemy {
+        title = "Friendly Units Mark Enemy Positions?";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 1;
+    };
+	class ZeusSeesAI {
+		title = "Allow Zeus to see spawned AI";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 1;
+	}
+	class Fatigue {
+        title = "Player Fatigue";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 0;
+    };
+	class Stamina {
+        title = "Player Stamina";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 0;
+    };
+	class CustomAim {
+        title = "More Steady Aim";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 1;
+    };
+	class SideObjectives {
+        title = "Enabled Side Objectives";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 1;
+    };
+	class RandomMines {
+        title = "Enabled Random Mines";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 0;
+    };
+	class NSides {
+        title = "Number of Side Missions";
+        values[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+        texts[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+        default = 3;
+    };
+	class NGarrisons {
+        title = "Number of Garrisons";
+        values[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+        texts[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+        default = 3;
+    };
+	class PlaceZoneRandomly {
+        title = "Place Zone Randomly";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 0;
+    };
+    class RandomSideLocations {
+        title = "Place Side Mission Randomly";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 1;
+    };
+	class ZoneSideEnabled {
+        title = "Zone Sides Enabled";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 1;
+    };
+    class VirutalSupport {
+        title = "Virutal Support";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 1;
+    };
+    class FriendliesUseTransport {
+        title = "Friendlies Use Transport";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 1;
+    };
+    class ObjectivesRequireClearedSpace {
+        title = "Objectives Require Cleared Space";
+        values[] = {0,1};
+        texts[] = {"Disabled","Enabled"};
+        default = 1;
+    };
+    class  MaxUserVehicles {
+		title = "Max User Vehicles"; // Param name visible in the list
+		values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 17, 20, 25, 30, 40, 50, 100}; // Values; must be integers; has to have the same number of elements as 'texts'
+		default = 10; // Default value; must be listed in 'values' array, otherwise 0 is used
+		// Default values that are not whole numbers do not work. Param will default to 0 (or 1 if defined)
+	};
+    class MaxFriendlyGroupSize {
+        title = "Max Friendly Group Unit Size";
+        values[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+        texts[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+        default = 12;
+    }
+
+    //#define WEATHER_DEFAULT	25
+    //#define DEBUGCONSOLE_DEFAULT 0
+    //#define TIMEACCELERATION_DEFAULT 1
+
+	//#include "\a3\functions_f\Params\paramWeather.hpp"
+	//#include "\a3\functions_f\Params\paramDebugConsole.hpp"
+	//#include "\a3\Functions_F_MP_Mark\Params\paramTimeAcceleration.hpp"
+
+};
+
+class CfgFunctions
+{
+	//--------------------------------------------------------------
+	//------------------------AIS INJURY----------------------------
+	//--------------------------------------------------------------
+	#include "AIS\cfgFunctions.hpp"
+	//--------------------------------------------------------------
+	#include "SBGF\cfgFunctions.hpp"
+
+////THE FOLLOWING LINE IS NEEDED FOR VCOMAI DESCRIPTION.EXT.
+	#include "vcom\cfgFunctions.hpp"
+};
+//------------------------AIS INJURY----------------------------
+#include "AIS\Effects\BarDlg.hpp"
+//--------------------------------------------------------------

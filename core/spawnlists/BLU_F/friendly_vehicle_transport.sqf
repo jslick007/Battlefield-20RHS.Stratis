@@ -1,0 +1,13 @@
+[
+	"B_Truck_01_transport_F",
+	"B_Truck_01_covered_F",
+	"B_APC_Wheeled_01_cannon_F",
+	"B_APC_Wheeled_03_cannon_F",
+	"B_MRAP_01_F",
+	"B_MRAP_01_gmg_F",
+	"B_MRAP_01_hmg_F",
+	"B_T_LSV_01_armed_F",
+	"B_T_LSV_01_AT_F",
+	"B_T_LSV_01_armed_CTRG_F",
+	"B_T_LSV_01_unarmed_F"
+];
